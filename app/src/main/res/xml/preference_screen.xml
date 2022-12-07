@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        android:title="@string/settings">
+        <ListPreference
+            android:key="preference_theme"
+            android:icon="@drawable/ic_baseline_tv_24"
+            android:entries="@array/theme_entries"
+            android:entryValues="@array/theme_entries_values"
+            app:useSimpleSummaryProvider="true"
+            android:title="@string/theme"
+            android:summary="@string/theme_summary" />
+        <Preference
+            android:key="preference_clear_data"
+            android:icon="@drawable/ic_baseline_delete_24"
+            android:title="@string/clear_history"
+            android:summary="@string/clear_history_summary" />
+        <Preference
+            android:key="preference_credits"
+            android:icon="@drawable/ic_baseline_copyright_24"
+            android:title="@string/credits"
+            android:summary="@string/credits_summary" />
+    </PreferenceCategory>
+
+    <PreferenceCategory>
+        <Preference
+            android:key="preference_version"
+            android:shouldDisableView="true"
+            android:title="@string/version"
+            android:summary="1234"/>
+    </PreferenceCategory>
+</androidx.preference.PreferenceScreen>

@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">Smart Steps Tracker</string>
+    <string name="title_activity_log">LogActivity</string>
+    <string name="notification_content">Smart Steps Tracker is counting your steps.</string>
+    <string name="stop_tracking">Stop counting</string>
+    <string name="today">Today</string>
+    <string name="this_week">This week</string>
+    <string name="this_month">This month</string>
+    <string name="steps_today">steps today</string>
+    <string name="steps_this_week">steps this week</string>
+    <string name="steps">steps</string>
+
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_data_available">No data available</string>
+    <string name="past_month">Past month</string>
+    <string name="last_30_days">Last 30 days</string>
+    <string name="theme">Display and theme</string>
+    <string name="theme_summary">Dark mode, light mode, and system default</string>
+    <string name="clear_history">Clear history</string>
+    <string name="clear_history_summary">Delete all data</string>
+    <string name="credits">Credits</string>
+    <string name="credits_summary">About this app</string>
+    <string name="version">Version</string>
+    <string name="settings">Settings</string>
+    <string name="confirm_delete_history">Are you sure you want to delete the entire history? This operation cannot be undone.</string>
+    <string name="delete_all">Delete all</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="history_data_deleted">Your historical data has been deleted.</string>
+    <string name="something_went_wrong">Uh oh. Something went wrong.</string>
+    <string name="about_content">This app was designed and developed by Raphael Cohen. Animations by Korhan Ulusoy.\n\nPlease help us improve this app by sending your feedback, comments, and ideas. We appreciate your support.</string>
+    <string name="send_feedback">Send feedback</string>
+</resources>
