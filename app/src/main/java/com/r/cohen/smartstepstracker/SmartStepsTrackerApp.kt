@@ -38,16 +38,20 @@ class SmartStepsTrackerApp: Application() {
                 return@enableActivityTransitions
             }
 
-            try {
-                if (transitionsReceiver != null) {
-                    unregisterReceiver(transitionsReceiver)
-                }
-            } catch (e: Exception) {
-                e.message?.let { Log.d("dbg", it) }
-            }
+            unregisterActivityReceiver()
 
             registerReceiver(transitionsReceiver, ActivityTransitionReceiver.getIntentFilter())
             Logger.log("registerActivityReceiver done")
+        }
+    }
+
+    fun unregisterActivityReceiver() {
+        try {
+            if (transitionsReceiver != null) {
+                unregisterReceiver(transitionsReceiver)
+            }
+        } catch (e: Exception) {
+            e.message?.let { Log.d("dbg", it) }
         }
     }
 

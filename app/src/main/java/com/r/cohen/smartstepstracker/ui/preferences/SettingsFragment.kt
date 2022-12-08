@@ -13,14 +13,25 @@ import com.r.cohen.smartstepstracker.R
 import com.r.cohen.smartstepstracker.SmartStepsTrackerApp
 import com.r.cohen.smartstepstracker.repo.StepsTrackerRepo
 import com.r.cohen.smartstepstracker.store.SmartStepsTrackerPrefs
+import com.r.cohen.smartstepstracker.ui.logger.LogActivity
 
 class SettingsFragment: PreferenceFragmentCompat() {
+    private var versionPrefClickCount = 0
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preference_screen, rootKey)
 
         findPreference<Preference>("preference_version")?.let { prefVersion ->
             prefVersion.summary = BuildConfig.VERSION_NAME
-            prefVersion.isSelectable = false
+            //prefVersion.isSelectable = false
+            prefVersion.setOnPreferenceClickListener { _ ->
+                versionPrefClickCount++
+                if (versionPrefClickCount >= 10) {
+                    versionPrefClickCount = 0
+                    requireContext().startActivity(Intent(requireContext(), LogActivity::class.java))
+                }
+                return@setOnPreferenceClickListener true
+            }
         }
 
         findPreference<Preference>("preference_clear_data")?.setOnPreferenceClickListener { _ ->

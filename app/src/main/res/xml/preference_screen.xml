@@ -26,8 +26,7 @@
     <PreferenceCategory>
         <Preference
             android:key="preference_version"
-            android:shouldDisableView="true"
             android:title="@string/version"
-            android:summary="1234"/>
+            android:summary="1.0"/>
     </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

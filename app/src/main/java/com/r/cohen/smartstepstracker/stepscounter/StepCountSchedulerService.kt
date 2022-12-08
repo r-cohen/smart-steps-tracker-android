@@ -44,7 +44,7 @@ class StepCountSchedulerService : JobService() {
 
     override fun onStopJob(params: JobParameters?): Boolean {
         Logger.log("onStopJob")
-        // do we need to unregister broadcast receiver here?
+        SmartStepsTrackerApp.instance.unregisterActivityReceiver()
         return true
     }
 
