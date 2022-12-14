@@ -9,6 +9,7 @@ import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import com.r.cohen.smartstepstracker.R
 import com.r.cohen.smartstepstracker.SmartStepsTrackerApp
 import com.r.cohen.smartstepstracker.logger.Logger
+import com.r.cohen.smartstepstracker.repo.DateTools
 import com.r.cohen.smartstepstracker.repo.StepsTrackerRepo
 import com.r.cohen.smartstepstracker.ui.extensions.configureDisplay
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -40,40 +41,49 @@ class WeekViewModel: ViewModel() {
         StepsTrackerRepo.getWeekMeasures { measures ->
             val hasOnlyZeros = measures.none { it.stepsCount > 0 }
 
-            if (measures.isNotEmpty() && !hasOnlyZeros) {
-                emptyState.postValue(false)
-
-                val points = ArrayList<Array<*>>()
-                for (dow in Calendar.SUNDAY..Calendar.SATURDAY) {
-                    val count = measures
-                        .filter {
-                            val cal = Calendar.getInstance()
-                            cal.timeInMillis = it.timestamp
-                            cal.get(Calendar.DAY_OF_WEEK) == dow
-                        }
-                        .sumOf { it.stepsCount }
-                    points.add(arrayOf(getDayOfWeekText(dow), count))
-                }
-
-                if (points.size <= 1) {
-                    emptyState.postValue(true)
-                    return@getWeekMeasures
-                }
-
-                val model = AAChartModel().apply {
-                    configureDisplay()
-                    series(arrayOf(
-                        AASeriesElement().apply {
-                            configureDisplay()
-                            data(points.toTypedArray())
-                        }
-                    ))
-                }
-
-                chartModel.postValue(model)
-            } else {
+            if (measures.isEmpty() || hasOnlyZeros) {
                 emptyState.postValue(true)
+                return@getWeekMeasures
             }
+
+            val points = ArrayList<Array<*>>()
+            val now = System.currentTimeMillis()
+            val dow = DateTools.getFirstDayOfWeekFrom(now)
+            val cal = Calendar.getInstance()
+            cal.timeInMillis = dow
+            var i = 0
+            while (i < 7) {
+                val dowText = getDayOfWeekText(cal.get(Calendar.DAY_OF_WEEK))
+                val count = measures
+                    .filter {
+                        val calm = Calendar.getInstance()
+                        calm.timeInMillis = it.timestamp
+                        calm.get(Calendar.DAY_OF_WEEK) == cal.get(Calendar.DAY_OF_WEEK)
+                    }
+                    .sumOf { it.stepsCount }
+                points.add(arrayOf(dowText, count))
+
+                cal.add(Calendar.DATE, 1)
+                i++
+            }
+
+            if (points.size <= 1) {
+                emptyState.postValue(true)
+                return@getWeekMeasures
+            }
+
+            val model = AAChartModel().apply {
+                configureDisplay()
+                series(arrayOf(
+                    AASeriesElement().apply {
+                        configureDisplay()
+                        data(points.toTypedArray())
+                    }
+                ))
+            }
+
+            emptyState.postValue(false)
+            chartModel.postValue(model)
         }
     }
 

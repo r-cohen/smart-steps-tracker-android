@@ -40,26 +40,25 @@ class TodayViewModel: ViewModel() {
         StepsTrackerRepo.getTodayMeasures { measures ->
             val hasOnlyZeros = measures.none { it.stepsCount > 0 }
 
-            if (measures.size >= 2 && !hasOnlyZeros) {
-                emptyState.postValue(false)
-
-                val points = ArrayList<Array<*>>()
-                points.addAll(measures.map { getPointFromMeasure(it) }.toTypedArray())
-
-                val model = AAChartModel().apply {
-                    configureDisplay()
-                    series(arrayOf(
-                        AASeriesElement().apply {
-                            configureDisplay()
-                            data(points.toTypedArray())
-                        }
-                    ))
-                }
-
-                chartModel.postValue(model)
-            } else {
+            if (measures.size < 2 || hasOnlyZeros) {
                 emptyState.postValue(true)
+                return@getTodayMeasures
             }
+
+            val points = ArrayList<Array<*>>()
+            points.addAll(measures.map { getPointFromMeasure(it) }.toTypedArray())
+
+            val model = AAChartModel().apply {
+                configureDisplay()
+                series(arrayOf(
+                    AASeriesElement().apply {
+                        configureDisplay()
+                        data(points.toTypedArray())
+                    }
+                ))
+            }
+            emptyState.postValue(false)
+            chartModel.postValue(model)
         }
     }
 
