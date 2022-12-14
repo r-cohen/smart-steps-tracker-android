@@ -4,21 +4,27 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineDataSet
+import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
+import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import com.r.cohen.smartstepstracker.logger.Logger
 import com.r.cohen.smartstepstracker.repo.StepsTrackerRepo
+import com.r.cohen.smartstepstracker.store.StepsCountMeasure
+import com.r.cohen.smartstepstracker.ui.ViewModelEvent
+import com.r.cohen.smartstepstracker.ui.extensions.configureDisplay
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import java.text.SimpleDateFormat
+import java.util.*
 
 class TodayViewModel: ViewModel() {
+    val emptyState = MutableLiveData(true)
     private val stepsCountToday = MutableLiveData(0)
     val formattedStepsCountToday = MediatorLiveData<String>().apply {
         val observer = Observer<Int> { postValue(String.format("%,d", it)) }
         addSource(stepsCountToday, observer)
     }
-    val measurementsDataSet = MutableLiveData<LineDataSet>()
+    val chartModelEvent = MutableLiveData<ViewModelEvent<AAChartModel>>()
     private val subscriptions = ArrayList<Disposable>()
 
     fun subscribeToEvents() {
@@ -35,21 +41,36 @@ class TodayViewModel: ViewModel() {
         ))
 
         StepsTrackerRepo.getTodayMeasures { measures ->
-            val dataset = measures.map { measure ->
-                Entry(measure.timestamp.toFloat(), measure.stepsCount.toFloat())
-            }
+            if (measures.size >= 2) {
+                emptyState.postValue(false)
 
-            measurementsDataSet.postValue(
-                LineDataSet(
-                    measures.map { measure ->
-                        Entry(measure.timestamp.toFloat(), measure.stepsCount.toFloat())
-                    }, ""
-                ),
-            )
+                val points = ArrayList<Array<*>>()
+                points.addAll(measures.map { getPointFromMeasure(it) }.toTypedArray())
+
+                val model = AAChartModel().apply {
+                    configureDisplay()
+                    series(arrayOf(
+                        AASeriesElement().apply {
+                            configureDisplay()
+                            data(points.toTypedArray())
+                        }
+                    ))
+                }
+
+                chartModelEvent.postValue(ViewModelEvent(model))
+            } else {
+                emptyState.postValue(true)
+            }
         }
     }
 
     fun unsubscribeEvents() {
         subscriptions.filter { !it.isDisposed }.forEach { it.dispose() }
+    }
+
+    private fun getPointFromMeasure(measure: StepsCountMeasure): Array<Any> {
+        val timeFormat = SimpleDateFormat("HH:mm", Locale.US)
+        val time = timeFormat.format(Date(measure.timestamp))
+        return arrayOf(time, measure.stepsCount)
     }
 }

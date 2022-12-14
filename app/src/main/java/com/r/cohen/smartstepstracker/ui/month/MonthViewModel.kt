@@ -4,8 +4,6 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineDataSet
 import com.r.cohen.smartstepstracker.logger.Logger
 import com.r.cohen.smartstepstracker.repo.StepsTrackerRepo
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -18,7 +16,6 @@ class MonthViewModel: ViewModel() {
         val observer = Observer<Int> { postValue(String.format("%,d", it)) }
         addSource(stepsCountMonth, observer)
     }
-    val measurementsDataSet = MutableLiveData<LineDataSet>()
     private val subscriptions = ArrayList<Disposable>()
 
     fun subscribeToEvents() {
@@ -34,13 +31,7 @@ class MonthViewModel: ViewModel() {
         ))
 
         StepsTrackerRepo.getMonthMeasures { measures ->
-            measurementsDataSet.postValue(
-                LineDataSet(
-                    measures.map { measure ->
-                        Entry(measure.timestamp.toFloat(), measure.stepsCount.toFloat())
-                    }, ""
-                ),
-            )
+
         }
     }
 

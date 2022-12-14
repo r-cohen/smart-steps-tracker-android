@@ -13,11 +13,11 @@
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/emptyAnim"
+            app:visibleGone="@{viewModel.emptyState}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:lottie_rawRes="@raw/walkingoutside"
             app:lottie_loop="true"
@@ -28,7 +28,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="18dp"
-            app:cardElevation="4dp"
+            app:cardElevation="2dp"
             app:cardCornerRadius="14dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -68,9 +68,9 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <com.github.mikephil.charting.charts.LineChart
-            android:visibility="gone"
-            android:id="@+id/dayChart"
+        <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+            android:id="@+id/todayChart"
+            app:visibleGone="@{!viewModel.emptyState}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
