@@ -6,5 +6,6 @@ import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 fun AASeriesElement.configureDisplay() {
     name("steps")
     color("#c0c0c0")
+    lineWidth(4)
     type(AAChartType.Areaspline)
 }

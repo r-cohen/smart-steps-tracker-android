@@ -41,7 +41,9 @@ class TodayViewModel: ViewModel() {
         ))
 
         StepsTrackerRepo.getTodayMeasures { measures ->
-            if (measures.size >= 2) {
+            val hasOnlyZeros = measures.none { it.stepsCount > 0 }
+
+            if (measures.size >= 2 && !hasOnlyZeros) {
                 emptyState.postValue(false)
 
                 val points = ArrayList<Array<*>>()
