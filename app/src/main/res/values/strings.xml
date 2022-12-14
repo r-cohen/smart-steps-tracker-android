@@ -39,4 +39,11 @@
     <string name="something_went_wrong">Uh oh. Something went wrong.</string>
     <string name="about_content">This app was designed and developed by Raphael Cohen. Animations by Korhan Ulusoy.\n\nPlease help us improve this app by sending your feedback, comments, and ideas. We appreciate your support.</string>
     <string name="send_feedback">Send feedback</string>
+    <string name="sunday">Sunday</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Firday</string>
+    <string name="saturday">Saturday</string>
 </resources>

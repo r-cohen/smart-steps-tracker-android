@@ -13,6 +13,7 @@
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/emptyAnim"
+            app:visibleGone="@{viewModel.emptyState}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -67,5 +68,15 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+            android:id="@+id/weekChart"
+            app:visibleGone="@{!viewModel.emptyState}"
+            app:bindChartModel="@{viewModel.chartModel}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardviewStepsWeek"
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

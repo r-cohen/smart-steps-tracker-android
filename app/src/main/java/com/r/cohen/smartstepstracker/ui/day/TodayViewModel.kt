@@ -27,9 +27,7 @@ class TodayViewModel: ViewModel() {
     private val subscriptions = ArrayList<Disposable>()
 
     fun subscribeToEvents() {
-        StepsTrackerRepo.getTodayStepsCount { count ->
-            stepsCountToday.postValue(count)
-        }
+        StepsTrackerRepo.getTodayStepsCount { count -> stepsCountToday.postValue(count) }
         subscriptions.addAll(listOf(
             StepsTrackerRepo.todayStepsCountChange
                 .subscribeOn(Schedulers.io())
