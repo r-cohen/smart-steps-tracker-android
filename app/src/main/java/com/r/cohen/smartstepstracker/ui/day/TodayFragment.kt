@@ -20,10 +20,6 @@ class TodayFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
-        viewModel.chartModelEvent.observe(viewLifecycleOwner) {
-            it?.handle()?.let { model -> binding.todayChart.aa_drawChartWithChartModel(model) }
-        }
-
         return binding.root
     }
 

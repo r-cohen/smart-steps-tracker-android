@@ -9,7 +9,6 @@ import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import com.r.cohen.smartstepstracker.logger.Logger
 import com.r.cohen.smartstepstracker.repo.StepsTrackerRepo
 import com.r.cohen.smartstepstracker.store.StepsCountMeasure
-import com.r.cohen.smartstepstracker.ui.ViewModelEvent
 import com.r.cohen.smartstepstracker.ui.extensions.configureDisplay
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
@@ -24,7 +23,7 @@ class TodayViewModel: ViewModel() {
         val observer = Observer<Int> { postValue(String.format("%,d", it)) }
         addSource(stepsCountToday, observer)
     }
-    val chartModelEvent = MutableLiveData<ViewModelEvent<AAChartModel>>()
+    val chartModel = MutableLiveData<AAChartModel>()
     private val subscriptions = ArrayList<Disposable>()
 
     fun subscribeToEvents() {
@@ -59,7 +58,7 @@ class TodayViewModel: ViewModel() {
                     ))
                 }
 
-                chartModelEvent.postValue(ViewModelEvent(model))
+                chartModel.postValue(model)
             } else {
                 emptyState.postValue(true)
             }
