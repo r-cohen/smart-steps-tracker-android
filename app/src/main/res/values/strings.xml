@@ -46,4 +46,7 @@
     <string name="thursday">Thursday</string>
     <string name="friday">Firday</string>
     <string name="saturday">Saturday</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">Your steps count today</string>
 </resources>

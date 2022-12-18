@@ -9,12 +9,23 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 object StepsTrackerRepo {
     private val dbDao = SmartStepsTrackerApp.stepsCountStore.stepsCountMeasureDao()
     val todayStepsCountChange: PublishSubject<Int> = PublishSubject.create()
+    private val mutex = Mutex()
 
-    fun saveStepsCount(totalCount: Int) {
+    fun saveStepsCount(totalCount: Int) = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            saveSteps(totalCount)
+        } catch (e: Exception) {
+            Logger.log(e.message)
+        }
+    }
+
+    private suspend fun saveSteps(totalCount: Int) = mutex.withLock {
         val now = System.currentTimeMillis()
         val delta = SmartStepsTrackerPrefs.getStepsCountLastValue()?.let { previous ->
             if (DateTools.isSameDay(now, previous.timestamp)) totalCount - previous.stepsCount
@@ -29,26 +40,21 @@ object StepsTrackerRepo {
         } ?: 0
 
         val cumulativeDelta = previousDelta + delta
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val lastMeasure = dbDao.getLastMeasure()
-                if (lastMeasure == null) {
-                    dbDao.saveMeasure(StepsCountMeasure(now, cumulativeDelta))
-                    SmartStepsTrackerPrefs.setStepsCountCumulativeDelta(0)
-                } else {
-                    val frequency = StepCountSchedulerService.stepsQueryInterval
-                    if (now - lastMeasure.timestamp >= frequency) {
-                        dbDao.saveMeasure(StepsCountMeasure(now, cumulativeDelta))
-                        SmartStepsTrackerPrefs.setStepsCountCumulativeDelta(0)
-                    } else {
-                        SmartStepsTrackerPrefs.setStepsCountCumulativeDelta(cumulativeDelta)
-                    }
-                }
-                getTodayStepsCount { count -> todayStepsCountChange.onNext(count) }
-            } catch (e: Exception) {
-                Logger.log(e.message)
+
+        val lastMeasure = dbDao.getLastMeasure()
+        if (lastMeasure == null) {
+            dbDao.saveMeasure(StepsCountMeasure(now, cumulativeDelta))
+            SmartStepsTrackerPrefs.setStepsCountCumulativeDelta(0)
+        } else {
+            val frequency = StepCountSchedulerService.stepsQueryInterval
+            if (now - lastMeasure.timestamp >= frequency) {
+                dbDao.saveMeasure(StepsCountMeasure(now, cumulativeDelta))
+                SmartStepsTrackerPrefs.setStepsCountCumulativeDelta(0)
+            } else {
+                SmartStepsTrackerPrefs.setStepsCountCumulativeDelta(cumulativeDelta)
             }
         }
+        getTodayStepsCount { count -> todayStepsCountChange.onNext(count) }
     }
 
     fun getTodayStepsCount(onComplete: (Int) -> Unit)  {
