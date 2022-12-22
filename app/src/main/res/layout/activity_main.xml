@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:tint="?attr/colorSecondaryVariant"
-            android:src="@drawable/ic_baseline_more_vert_24"
+            android:src="@drawable/ic_outline_settings_24"
             android:padding="@dimen/default_padding"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

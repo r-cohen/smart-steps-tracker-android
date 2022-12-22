@@ -11,6 +11,7 @@ object SmartStepsTrackerPrefs {
     private const val stepsCountLastValueKey = "stepsCountLastValue"
     private const val stepsCountCumulativeDeltaKey = "stepsCountCumulativeDelta"
     private const val selectedThemeValueKey = "selectedThemeValue"
+    private const val onboardingPassedKey = "onboardingPassed"
 
     fun clearAll() = prefs.edit().clear().apply()
 

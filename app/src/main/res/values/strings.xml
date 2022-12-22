@@ -49,4 +49,6 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">Your steps count today</string>
+    <string name="activity_permission">This app requires physical activity permission in order to detect when you walk or run. Please allow this app to access your physical activity by tapping the button below and choosing "Allow".</string>
+    <string name="activity_permission_button">Allow app to access Activity</string>
 </resources>
