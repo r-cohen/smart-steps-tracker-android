@@ -11,6 +11,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/textviewCheckBackLater"
+            app:visibleGone="@{viewModel.emptyState}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/come_back_for_stats"
+            android:textAlignment="center"
+            android:layout_marginBottom="40dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/emptyAnim"
             app:visibleGone="@{viewModel.emptyState}"

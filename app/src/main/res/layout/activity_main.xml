@@ -19,6 +19,7 @@
             app:layout_constraintEnd_toStartOf="@+id/settingsIcon"
             app:layout_constraintTop_toTopOf="@+id/settingsIcon"
             app:layout_constraintBottom_toBottomOf="@+id/settingsIcon"
+            android:paddingBottom="6dp"
             android:paddingStart="@dimen/default_padding"
             android:paddingEnd="@dimen/default_padding"
             android:text="@string/app_name"

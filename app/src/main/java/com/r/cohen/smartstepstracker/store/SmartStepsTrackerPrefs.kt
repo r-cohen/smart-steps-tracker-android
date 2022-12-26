@@ -46,4 +46,7 @@ object SmartStepsTrackerPrefs {
 
     fun setSelectedThemeValue(value: String) = prefs.edit().putString(selectedThemeValueKey, value).apply()
     fun getSelectedThemeValue(): String = prefs.getString(selectedThemeValueKey, "0") ?: "0"
+
+    fun setOnboardingPassed() = prefs.edit().putBoolean(onboardingPassedKey, true).apply()
+    fun isOnboardingPassed(): Boolean = prefs.getBoolean(onboardingPassedKey, false)
 }

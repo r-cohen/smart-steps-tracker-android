@@ -12,6 +12,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.r.cohen.smartstepstracker.R
 import com.r.cohen.smartstepstracker.databinding.ActivityMainBinding
 import com.r.cohen.smartstepstracker.stepscounter.StepCountSchedulerService
+import com.r.cohen.smartstepstracker.store.SmartStepsTrackerPrefs
 import com.r.cohen.smartstepstracker.ui.onboarding.PermissionsActivity
 import com.r.cohen.smartstepstracker.ui.preferences.PreferencesActivity
 
@@ -47,15 +48,19 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+        var permissionsMissing = false
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val permission = ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACTIVITY_RECOGNITION
             )
             if (permission != PackageManager.PERMISSION_GRANTED) {
-                startActivity(Intent(this, PermissionsActivity::class.java))
-                return
+                permissionsMissing = true
             }
+        }
+        if (permissionsMissing || !SmartStepsTrackerPrefs.isOnboardingPassed()) {
+            startActivity(Intent(this, PermissionsActivity::class.java))
+            return
         }
 
         registerAndSchedule()

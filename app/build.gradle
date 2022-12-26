@@ -12,8 +12,8 @@ android {
         applicationId "com.r.cohen.smartstepstracker"
         minSdk 27
         targetSdk 33
-        versionCode 100
-        versionName "1.0"
+        versionCode 101
+        versionName "1.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

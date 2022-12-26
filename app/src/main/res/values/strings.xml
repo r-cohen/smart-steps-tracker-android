@@ -51,4 +51,8 @@
     <string name="app_widget_description">Your steps count today</string>
     <string name="activity_permission">This app requires physical activity permission in order to detect when you walk or run. Please allow this app to access your physical activity by tapping the button below and choosing "Allow".</string>
     <string name="activity_permission_button">Allow app to access Activity</string>
+    <string name="battery_optimization_information">For optimal accuracy, we recommend setting the battery options for this app to "Unrestricted". Click the button below to go to the app settings, select Battery, and then chose "Unrestricted".</string>
+    <string name="battery_optimization_button">Open app settings</string>
+    <string name="skip">Skip</string>
+    <string name="come_back_for_stats">Check back later on this screen for statistics</string>
 </resources>
