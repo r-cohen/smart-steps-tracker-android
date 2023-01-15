@@ -26,7 +26,6 @@ class SmartStepsTrackerApp: Application() {
         stepsCountStore = Room.databaseBuilder(this, StepsCountDb::class.java, "SmartStepsTrackerDb")
             .build()
         prefs = getSharedPreferences("stepstrackprefs", Context.MODE_PRIVATE)
-        transitionsReceiver = ActivityTransitionReceiver()
         setAppTheme(SmartStepsTrackerPrefs.getSelectedThemeValue())
     }
 
@@ -34,11 +33,16 @@ class SmartStepsTrackerApp: Application() {
         Logger.log("registerActivityReceiver")
 
         ActivityTransitionReceiver.enableActivityTransitions(this) { success ->
+            Logger.log("registerActivityReceiver callback result: $success")
             if (!success) {
                 return@enableActivityTransitions
             }
 
             unregisterActivityReceiver()
+
+            if (transitionsReceiver == null) {
+                transitionsReceiver = ActivityTransitionReceiver()
+            }
 
             registerReceiver(transitionsReceiver, ActivityTransitionReceiver.getIntentFilter())
             Logger.log("registerActivityReceiver done")
@@ -46,12 +50,14 @@ class SmartStepsTrackerApp: Application() {
     }
 
     fun unregisterActivityReceiver() {
-        try {
-            if (transitionsReceiver != null) {
+        Logger.log("unregisterActivityReceiver")
+        if (transitionsReceiver != null) {
+            try {
                 unregisterReceiver(transitionsReceiver)
+                transitionsReceiver = null
+            } catch (e: Exception) {
+                e.message?.let { Log.d("dbg", it) }
             }
-        } catch (e: Exception) {
-            e.message?.let { Log.d("dbg", it) }
         }
     }
 

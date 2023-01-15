@@ -32,22 +32,31 @@ class ActivityTransitionReceiver: BroadcastReceiver() {
         fun getIntentFilter(): IntentFilter = IntentFilter(RECEIVER_ACTION)
 
         fun enableActivityTransitions(context: Context, onDone: (Boolean) -> Unit) {
+            Logger.log("enableActivityTransitions")
             if (ActivityCompat.checkSelfPermission(
                     context,
                     Manifest.permission.ACTIVITY_RECOGNITION
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
+                Logger.log("enableActivityTransitions permissions not granted")
                 return
             }
 
             val request = ActivityTransitionWalkRequest.build()
-            ActivityRecognition.getClient(context)
-                .requestActivityTransitionUpdates(request, getPendingIntent(context))
-                .apply {
-                    addOnSuccessListener { onDone.invoke(true) }
-                    addOnFailureListener { onDone.invoke(false) }
+            Logger.log("enableActivityTransitions built request, getClient")
+            val client = ActivityRecognition.getClient(context)
+            Logger.log("enableActivityTransitions removeActivityTransitionUpdates")
+            client.removeActivityTransitionUpdates(getPendingIntent(context))
+                .addOnCompleteListener {
+                    Logger.log("enableActivityTransitions removeActivityTransitionUpdates complete => requestActivityTransitionUpdates")
+                    client
+                        //.requestActivityUpdates(StepCountSchedulerService.stepsQueryInterval - 1, getPendingIntent(context))
+                        .requestActivityTransitionUpdates(request, getPendingIntent(context))
+                        .apply {
+                            addOnSuccessListener { onDone.invoke(true) }
+                            addOnFailureListener { onDone.invoke(false) }
+                        }
                 }
-
         }
     }
 
