@@ -27,10 +27,13 @@ object StepsTrackerRepo {
 
     private suspend fun saveSteps(totalCount: Int) = mutex.withLock {
         val now = System.currentTimeMillis()
-        val delta = SmartStepsTrackerPrefs.getStepsCountLastValue()?.let { previous ->
+        var delta = SmartStepsTrackerPrefs.getStepsCountLastValue()?.let { previous ->
             if (DateTools.isSameDay(now, previous.timestamp)) totalCount - previous.stepsCount
             else 0
         } ?: 0
+        if (delta < 0) {
+            delta = 0
+        }
         SmartStepsTrackerPrefs.setStepsCountLastValue(totalCount)
 
         val previousCumul = SmartStepsTrackerPrefs.getStepsCountCumulativeDelta()
