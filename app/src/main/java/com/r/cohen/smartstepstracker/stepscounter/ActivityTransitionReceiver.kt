@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
-import android.os.Build
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.ActivityRecognition
 import com.google.android.gms.location.ActivityTransition
@@ -23,9 +22,9 @@ class ActivityTransitionReceiver: BroadcastReceiver() {
 
         private fun getPendingIntent(context: Context): PendingIntent {
             val intent = Intent(RECEIVER_ACTION)
-            val flag =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE
-                else PendingIntent.FLAG_UPDATE_CURRENT
+            val flag = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+                //PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            intent.setPackage(context.packageName)
             return PendingIntent.getBroadcast(context, REQUEST_CODE, intent, flag)
         }
 
@@ -53,18 +52,27 @@ class ActivityTransitionReceiver: BroadcastReceiver() {
                         //.requestActivityUpdates(StepCountSchedulerService.stepsQueryInterval - 1, getPendingIntent(context))
                         .requestActivityTransitionUpdates(request, getPendingIntent(context))
                         .apply {
-                            addOnSuccessListener { onDone.invoke(true) }
-                            addOnFailureListener { onDone.invoke(false) }
+                            addOnSuccessListener {
+                                Logger.log("requestActivityTransitionUpdates success")
+                                onDone.invoke(true)
+                            }
+                            addOnFailureListener {
+                                Logger.log("requestActivityTransitionUpdates failed ${it.message}")
+                                onDone.invoke(false)
+                            }
                         }
                 }
         }
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
+        Logger.log("onReceive called ${intent?.action}")
         if (intent?.action != RECEIVER_ACTION) {
             return
         }
+        Logger.log("onReceive action is valid. intent: ${intent.toString()}")
         if (ActivityTransitionResult.hasResult(intent)) {
+            Logger.log("onReceive intent hasResult")
             ActivityTransitionResult.extractResult(intent)?.transitionEvents?.forEach { event ->
                 Logger.log("activity ${event.activityType} transition ${event.transitionType}")
 

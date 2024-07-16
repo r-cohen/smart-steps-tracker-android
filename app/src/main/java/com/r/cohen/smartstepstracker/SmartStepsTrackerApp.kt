@@ -3,6 +3,7 @@ package com.r.cohen.smartstepstracker
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.room.Room
@@ -44,7 +45,12 @@ class SmartStepsTrackerApp: Application() {
                 transitionsReceiver = ActivityTransitionReceiver()
             }
 
-            registerReceiver(transitionsReceiver, ActivityTransitionReceiver.getIntentFilter())
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                registerReceiver(transitionsReceiver, ActivityTransitionReceiver.getIntentFilter(),
+                    RECEIVER_EXPORTED)
+            } else {
+                registerReceiver(transitionsReceiver, ActivityTransitionReceiver.getIntentFilter())
+            }
             Logger.log("registerActivityReceiver done")
         }
     }

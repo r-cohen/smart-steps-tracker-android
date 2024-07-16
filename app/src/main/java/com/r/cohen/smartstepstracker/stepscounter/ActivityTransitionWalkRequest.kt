@@ -9,29 +9,24 @@ class ActivityTransitionWalkRequest(
 ): ActivityTransitionRequest(transitions) {
     companion object {
         fun build(): ActivityTransitionWalkRequest {
-            val transitions = mutableListOf<ActivityTransition>()
-            transitions +=
+            val transitions = mutableListOf(
                 ActivityTransition.Builder()
                     .setActivityType(DetectedActivity.WALKING)
                     .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
-                    .build()
-            transitions +=
+                    .build(),
                 ActivityTransition.Builder()
                     .setActivityType(DetectedActivity.WALKING)
                     .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
-                    .build()
-
-            transitions +=
+                    .build(),
                 ActivityTransition.Builder()
                     .setActivityType(DetectedActivity.RUNNING)
                     .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
-                    .build()
-            transitions +=
+                    .build(),
                 ActivityTransition.Builder()
                     .setActivityType(DetectedActivity.RUNNING)
                     .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
                     .build()
-
+            )
             return ActivityTransitionWalkRequest(transitions)
         }
     }

@@ -2,11 +2,13 @@ package com.r.cohen.smartstepstracker.stepscounter
 
 import android.app.Service
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
 import com.r.cohen.smartstepstracker.logger.Logger
 import com.r.cohen.smartstepstracker.repo.StepsTrackerRepo
@@ -34,7 +36,11 @@ class StepCounterListenerService: Service() {
             stopSelf()
         } else {
             val notification = StepCounterNotificationFactory.build(this)
-            startForeground(StepCounterNotificationFactory.ongoingNotificationId, notification)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                startForeground(StepCounterNotificationFactory.ongoingNotificationId, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_HEALTH)
+            } else {
+                startForeground(StepCounterNotificationFactory.ongoingNotificationId, notification)
+            }
 
             if (stepListener == null) {
                 stepListener = object: SensorEventListener {
